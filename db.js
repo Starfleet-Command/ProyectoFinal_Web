@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
-const uri = "mongodb+srv://dndadmin:.DnDadm1n.@proyectofinal.heiln.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = "";
    // mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
    // var db = mongoose.connection;
    // db.on('error', console.error.bind(console, 'MongoDB connection error:'));
