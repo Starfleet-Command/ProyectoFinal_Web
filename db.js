@@ -19,6 +19,18 @@ module.exports = {
         }
     },
 
+    characterInsert:  async function characterInsert(body) {
+        try {
+            const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
+          const collection = client.db("Users").collection("users");
+          await collection.insertOne({ user: body.uname, password: body.pwd});          
+          client.close();
+          return 1;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     dbGetConnect:  async function dbGetConnect(body) {
         try {
           const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});

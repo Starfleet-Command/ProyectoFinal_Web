@@ -6,6 +6,7 @@ const router = express.Router();
 var db = require('./db');
 
 app.use(express.urlencoded({extended:true}));
+app.use(express.static(__dirname));
 
 app.get('/', function(req, res) {
     res.send('Página de inicio de nuestro Wiki');
@@ -14,6 +15,10 @@ app.get('/', function(req, res) {
 
 app.get('/login', function(req, res) {
     res.sendFile(path.join(__dirname+'/login.html'));
+});
+
+app.get('/createcharacter', function(req, res) {
+    res.sendFile(path.join(__dirname+'/character_create.html'));
 });
 
 app.post('/dbsignup', function(req, res) {

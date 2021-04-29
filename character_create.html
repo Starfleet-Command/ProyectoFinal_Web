@@ -1,0 +1,39 @@
+<script src="api.js"></script>
+<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Creation</title>
+</head>
+<body>
+    <div>
+        Select your class: 
+        <div>
+            <select id="selectClass">
+                <option>Choose a class</option>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script>
+    $(document).ready(
+    function fillClasses() {
+        var select = document.getElementById("selectClass");
+    var classes= getClasses();
+    for (let i = 0; i < classes.length; i++) {
+        var el = document.createElement("option");
+        el.text = classes[i];
+        el.value = classes[i];
+        select.add(el);
+        
+    } 
+    }
+    
+    );
+    
+</script>
