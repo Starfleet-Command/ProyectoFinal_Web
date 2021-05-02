@@ -22,10 +22,9 @@ module.exports = {
     characterInsert:  async function characterInsert(body) {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
-          const collection = client.db("Users").collection("users");
-          await collection.insertOne({ user: body.uname, password: body.pwd});          
+          const collection = client.db("Users").collection("characters");
+          await collection.insertOne({ name: body.name, class: body.class,level:body.level,race:body.race,ability_scores:body.abilityScores,s_throws:body.saveThrows, skills:body.skills,proficiencies:body.proficiencies,hp:body.hp});          
           client.close();
-          return 1;
         } catch (error) {
             console.log(error);
         }

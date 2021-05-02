@@ -1,10 +1,16 @@
+const fetch = require("node-fetch");
+
 module.exports = {
     getClasses: async function getClasses() {
         return fetch("https://www.dnd5eapi.co/api/classes")
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson);
-                return responseJson;
+                var classes = [];
+                for (let index = 0; index < responseJson.results.length; index++) {
+                    const element = responseJson.results[index];
+                    classes.push(element.index);
+                }
+                return classes;
             })
             .catch(error => {
                 console.error(error);
@@ -16,26 +22,31 @@ module.exports = {
             .then(response => response.json())
             .then(responseJson => {
                 console.log(responseJson);
-                var prof_amount = responseJson.proficiency_choices["choose"];
-                var skills = responseJson.proficiency_choices["from"];
+                var prof_amount = responseJson.proficiency_choices[0].choose;
+                var skills = responseJson.proficiency_choices[0].from;
                 var proficiencies = responseJson.proficiencies;
                 var saving_throws = responseJson.saving_throws;
                 var starting_equipment = responseJson.starting_equipment;
                 
+                var classData = [prof_amount,skills,proficiencies,saving_throws,starting_equipment];
+                return classData;
             })
             .catch(error => {
                 console.error(error);
             });
     },
 
-    getLevel: async function getLevel(body,class_) {
-        return fetch("https://www.dnd5eapi.co/api/classes/"+body+"/"+class_)
+    getLevel: async function getLevel(class_,level) {
+        return fetch("https://www.dnd5eapi.co/api/classes/"+class_+"/levels/"+level)
             .then(response => response.json())
             .then(responseJson => {
                 var spells = responseJson.spellcasting;
                 var features = responseJson.features;
                 // var f_choices = responseJson.feature_choices;
                 var class_specifics = responseJson.class_specific;  
+
+                var levelData = [spells,features,class_specifics];
+                return levelData;
             })
             .catch(error => {
                 console.error(error);
@@ -43,22 +54,30 @@ module.exports = {
     },
 
     getSpellsByLevel: async function getSpellsByLevel(body,level) {
-        return fetch("https://www.dnd5eapi.co/api/classes/"+body+"/"+"spells/")
+        return fetch("https://www.dnd5eapi.co/api/classes/"+body+"/spells/")
             .then(response => response.json())
             .then(function(responseJson) {
-                var classpells = JSON.parse(responseJson.results);
+                var classpells = responseJson.results;
                 return fetch("https://www.dnd5eapi.co/api/spells?level="+level)
                 .then(lvlresponse => lvlresponse.json())
                 .then(lvlresponse => {
-                    var lvlspells = JSON.parse(lvlresponse.results);
+                    var lvlspells = lvlresponse.results;
                     var innerjoin = [];
-                    for (let index = 0; index < classpells.length; index++) {
-                        if(classpells[index] in lvlspells)
+                    for (let i = 0; i < classpells.length; i++) {
+
+                        for (let j = 0; j < lvlspells.length; j++) {
+                            const element = lvlspells[j].name;
+
+                            if(classpells[i].name== element)
                         {
-                            innerjoin.append(classpells[index]);
+                            innerjoin.push(classpells[i]);
+                        }
+
                         }
                         
+                        
                     }
+                    return innerjoin;
                 })
             })
             .catch(error => {
