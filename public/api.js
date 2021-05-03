@@ -27,7 +27,6 @@ module.exports = {
                 var proficiencies = responseJson.proficiencies;
                 var saving_throws = responseJson.saving_throws;
                 var starting_equipment = responseJson.starting_equipment;
-                
                 var classData = [prof_amount,skills,proficiencies,saving_throws,starting_equipment];
                 return classData;
             })
@@ -36,15 +35,16 @@ module.exports = {
             });
     },
 
-    getLevel: async function getLevel(class_,level) {
-        return fetch("https://www.dnd5eapi.co/api/classes/"+class_+"/levels/"+level)
+    getLevel: async function getLevel(userClass,level) {
+        return fetch("https://www.dnd5eapi.co/api/classes/"+userClass+"/levels/"+level)
             .then(response => response.json())
             .then(responseJson => {
                 var spells = responseJson.spellcasting;
                 var features = responseJson.features;
                 // var f_choices = responseJson.feature_choices;
                 var class_specifics = responseJson.class_specific;  
-
+                var ability_bonus = responseJson.ability_score_bonuses;
+                var prof_bonus = responseJson.prof_bonus;
                 var levelData = [spells,features,class_specifics];
                 return levelData;
             })
@@ -58,11 +58,12 @@ module.exports = {
             .then(response => response.json())
             .then(function(responseJson) {
                 var classpells = responseJson.results;
+                var innerjoin = [];
                 return fetch("https://www.dnd5eapi.co/api/spells?level="+level)
                 .then(lvlresponse => lvlresponse.json())
                 .then(lvlresponse => {
                     var lvlspells = lvlresponse.results;
-                    var innerjoin = [];
+            
                     for (let i = 0; i < classpells.length; i++) {
 
                         for (let j = 0; j < lvlspells.length; j++) {

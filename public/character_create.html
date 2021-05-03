@@ -1,5 +1,3 @@
-<script src="/character.js"></script>
-<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 
 <html lang="en">
 <head>
@@ -9,12 +7,392 @@
     <title>Character Creation</title>
 </head>
 <body>
+    <form action="/characterInsert" method="POST">
+    
+    <div>
+        Select your level: 
+        <div>
+            <select id="selectLevel" name="level" onchange="getLevel(document.getElementById('selectClass').value,this.value)">
+            </select>
+        </div>
+    </div>
+    <br>
     <div>
         Select your class: 
         <div>
-            <select id="selectClass" onload="fillClasses()">
+            <select id="selectClass" name="class" onchange="getClassInfo(this.value),getLevel(this.value,document.getElementById('selectLevel').value)">
                 <option>Choose a class</option>
+            </select>
         </div>
     </div>
+    <br>
+    <div>
+        Select your race: 
+        <div>
+            <select id="selectRace" name="race">
+                <option>Choose a race</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="skillChoose">
+         
+    </div>
+
+    <div id="selectSkills">
+        
+    </div>
+
+    <div id="profs">
+        
+    </div>
+
+    <div id="throws">
+        
+    </div>
+
+    <div id="equipment">
+        
+    </div>
+
+    <div id="level">
+        Your class has the following attributes at the chosen level:
+    </div>
+
+    <div id="scoreBonus">
+        
+    </div>
+
+    <div id="abilityBonus">
+        
+    </div>
+
+    <div id="spells">
+        
+    </div>
+
+    <div id="spellAmount">
+
+    </div>
+    <select name="spells" id="selectSpells">
+
+    </select>
+
+    <div id="feats">
+        
+    </div>
+
+    <div id="classSpecs">
+        
+    </div>
+
+
+    <br>
+
+     <div id="selectScores" onchange="pointBuy()">
+         <div id="scoreVisual">
+            Select your Ability Scores! Remaining Points: 27/27
+         </div>
+        <br>
+        <br>
+        Strength
+        <select name="Strength" id="str" >
+        
+        </select>
+        <br>
+        Dexterity
+        <select name="Dexterity" id="dex">
+          
+        </select>
+        <br>
+        Constitution
+        <select name="Constitution" id="con">
+            
+        </select>
+        <br>
+        Intelligence
+        <select name="Intelligence" id="int">
+            
+        </select>
+        <br>
+        Wisdom
+        <select name="Wisdom" id="wis">
+        </select>
+        <br>
+        Charisma
+        <select name="Charisma" id="cha">
+        </select>
+     </div>
+
+    
+    </form>
 </body>
 </html>
+
+<script>
+    window.onload = function() {
+  getClasses();
+  getRaces();
+  addLevels();
+  pointBuySetup();
+  
+};
+
+    function getClasses() {
+        var classes = [];
+    return fetch("https://www.dnd5eapi.co/api/classes")
+            .then(response => response.json())
+            .then(responseJson => {
+                for (let index = 0; index < responseJson.results.length; index++) {
+                    const element = responseJson.results[index];
+                    classes.push(element.index);
+                }})
+            .then(()=>{
+                addToSelect(classes,"selectClass")
+                })
+            
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+    function addToSelect(data,id)
+    {
+        var select = document.getElementById(id);
+                for (let i = 0; i < data.length; i++) {
+                var el = document.createElement("option");
+                el.innerHTML = data[i];
+                el.value = data[i];
+                select.add(el);
+                }
+    }
+
+    function getRaces()
+    {
+        var races = [];
+    return fetch("https://www.dnd5eapi.co/api/races")
+            .then(response => response.json())
+            .then(responseJson => {
+                for (let index = 0; index < responseJson.results.length; index++) {
+                    const element = responseJson.results[index];
+                    races.push(element.index);
+                }})
+            .then(()=>{
+                addToSelect(races,"selectRace")
+                })
+            
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function addLevels()
+    {
+        levels = [];
+        for (let index = 1; index < 21; index++) {
+            levels.push(index); 
+        }
+        addToSelect(levels,"selectLevel");
+    }
+
+    function getClassInfo(userClass)
+    {
+        return fetch("https://www.dnd5eapi.co/api/classes/"+userClass)
+            .then(response => response.json())
+            .then(responseJson => {
+                var prof_amount = responseJson.proficiency_choices[0].choose;
+                var skills = responseJson.proficiency_choices[0].from;
+                var proficiencies = responseJson.proficiencies;
+                var saving_throws = responseJson.saving_throws;
+                var starting_equipment = responseJson.starting_equipment;
+                
+                var profText = document.getElementById("skillChoose");
+                profText.innerHTML="You are proficient in up to "+prof_amount+" of the following:";
+
+                var selectSkills = document.getElementById("selectSkills");
+                selectSkills.innerHTML="";
+                var li = document.createElement('li');
+
+                for (let index = 0; index < skills.length; index++) {
+                    var checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.value = 1;
+                    checkbox.name = skills[index].index;
+                    li.appendChild(checkbox);
+                    li.appendChild(document.createTextNode(skills[index].name));
+                }
+                selectSkills.append(li);
+                
+                var profs = document.getElementById("profs");
+                profs.innerHTML="";
+                profs.innerHTML += "<br>You are proficient with the following items: <br>"
+                for (let index = 0; index < proficiencies.length; index++) {
+                    profs.innerHTML+= proficiencies[index].name + "<br>";
+                    
+                }
+
+                var saves = document.getElementById("throws");
+                saves.innerHTML="";
+                saves.innerHTML += "<br>You are proficient in the following saving throws: <br>"
+
+                for (let index = 0; index < saving_throws.length; index++) {
+                    saves.innerHTML+= saving_throws[index].name + "<br>";
+                    
+                }
+
+                var equip = document.getElementById("equipment");
+                equip.innerHTML="";
+                equip.innerHTML += "<br>You start with the following equipment: <br>"
+
+                for (let index = 0; index < starting_equipment.length; index++) {
+                    equip.innerHTML+= starting_equipment[index].equipment.name + "<br>";
+                    
+                }
+                
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+     function getLevel(userClass,level) {
+        if(userClass!="Choose a class") {
+        return fetch("https://www.dnd5eapi.co/api/classes/"+userClass+"/levels/"+level)
+            .then(response => response.json())
+            .then(responseJson => {
+                var spells = responseJson.spellcasting;
+                var features = responseJson.features;
+                var class_specifics = responseJson.class_specific;  
+                var ability_bonus = responseJson.ability_score_bonuses;
+                var prof_bonus = responseJson.prof_bonus;
+
+                var ab = document.getElementById("abilityBonus")
+                ab.innerHTML= "<br>Your ability scores (INT, DEX, etc) get a bonus of +"+ability_bonus;
+
+                var pb = document.getElementById("scoreBonus")
+                pb.innerHTML= "<br>Skills you are proficient in get a bonus of +"+prof_bonus;
+
+                var fts = document.getElementById("feats");
+                fts.innerHTML="";
+                fts.innerHTML+= "<br> You have the following features (consult a 5e manual for more info) <br>";
+                for (let index = 0; index < features.length; index++) {
+                    fts.innerHTML+=features[index].name+"<br>"; 
+                    
+                }
+
+                var sp = document.getElementById("spells");
+                sp.innerHTML="";
+                if(spells!=undefined){
+                    sp.innerHTML= "<br>You have the following spell slots (plus those added by your spellcasting modifier):";
+                    var spellLevels=[];
+                    var spellLists = [];
+                    var spellno = 0;
+                for (let index = 0; index < Object.values(spells).length; index++) {
+                    if(Object.values(spells)[index]!=0)
+                    {
+                        sp.innerHTML+= "<br>Level "+index + ": "+Object.values(spells)[index];
+                        spellLevels.push(index);
+                        spellno+=parseInt(Object.values(spells)[index]);
+                    }
+                }
+                sa = document.getElementById("spellAmount");
+                sa.innerHTML= "<br>You may choose up to "+spellno+" spells, in the proportion specified above <br>";
+
+                for (const key in spellLevels) {
+                    spellNames=[];
+                        spellLists = getSpellsByLevel(userClass,key);
+                        spellLists.then((a) => {
+                            for (const name in a) {
+                                console.log(name);
+                                spellNames.push(a[name].name);
+                                    
+                            }
+                            addToSelect(spellNames,"selectSpells");
+                        });
+                        
+                    }
+                
+                    
+
+            }
+                var cs = document.getElementById("classSpecs");
+                cs.innerHTML="Any other class variables or restrictions (i.e Wild Shape's restrictions) are shown here:"
+                for (let index = 0; index < Object.values(class_specifics).length; index++) {
+                    if(Object.values(class_specifics)[index]!=0 || Object.values(class_specifics)[index]!="[]" )
+                    {
+                        cs.innerHTML+="<br>"+Object.keys(class_specifics)[index]+": "+Object.values(class_specifics)[index]
+                    }
+                    
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+     }
+
+     function pointBuySetup()
+     {
+         var selects= document.querySelectorAll("#selectScores > select");
+         points=[]
+            for (let index = 8; index < 19; index++) {
+                points.push(index);
+                
+            }
+         for (let index = 0; index < selects.length; index++) {
+             addToSelect(points,selects[index].id);
+             
+         }
+     }
+
+     function pointBuy()
+     {
+         var selects= document.querySelectorAll("#selectScores > select");
+         points=27;
+         basePoints=48;
+         currPoints=0;
+
+         for (let index = 0; index < selects.length; index++) {
+             currPoints+=parseInt(selects[index].value);
+    
+         }
+         var explainerText= document.querySelector("#selectScores > div");
+         var calc = (basePoints+points-currPoints);
+         explainerText.innerHTML= "Select your Ability Scores! Remaining Points:"+calc+"/27";
+     }
+
+     function getSpellsByLevel(userClass,level) {
+        return fetch("https://www.dnd5eapi.co/api/classes/"+userClass+"/spells/")
+            .then(response => response.json())
+            .then(function(responseJson) {
+                var classpells = responseJson.results;
+                return fetch("https://www.dnd5eapi.co/api/spells?level="+level)
+                .then(lvlresponse => lvlresponse.json())
+                .then(lvlresponse => {
+                    var lvlspells = lvlresponse.results;
+                    var innerjoin = [];
+                    for (let i = 0; i < classpells.length; i++) {
+
+                        for (let j = 0; j < lvlspells.length; j++) {
+                            const element = lvlspells[j].name;
+
+                            if(classpells[i].name== element)
+                        {
+                            innerjoin.push(classpells[i]);
+                        }
+
+                        }
+                        
+                        
+                    }
+                    return innerjoin;
+                })
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+ 
+</script>
