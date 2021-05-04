@@ -29,7 +29,7 @@
     <div>
         Select your race: 
         <div>
-            <select id="selectRace" name="race">
+            <select id="selectRace" name="race" onchange="getRaceInfo(this.value)">
                 <option>Choose a race</option>
             </select>
         </div>
@@ -41,6 +41,10 @@
 
     <div id="selectSkills">
         
+    </div>
+
+    <div id="racialTraits">
+
     </div>
 
     <div id="profs">
@@ -74,9 +78,9 @@
     <div id="spellAmount">
 
     </div>
-    <select name="spells" id="selectSpells">
+    <div id="selectSpells">
 
-    </select>
+    </div>
 
     <div id="feats">
         
@@ -94,6 +98,7 @@
             Select your Ability Scores! Remaining Points: 27/27
          </div>
         <br>
+                               
         <br>
         Strength
         <select name="Strength" id="str" >
@@ -186,6 +191,55 @@
             });
     }
 
+    function getRaceInfo(userRace){
+        if(userRace!="Choose your race")
+        {
+        return fetch("https://www.dnd5eapi.co/api/races/"+userRace)
+            .then(response => response.json())
+            .then(responseJson => {
+                var ability_bonuses = responseJson.ability_bonuses;
+                var speed = responseJson.speed;
+                var start_profs = responseJson.starting_proficiencies;
+                var languages = responseJson.languages;
+                var traits = responseJson.traits;
+
+                var bonuses = []
+                for (let index = 0; index < ability_bonuses.length; index++) {
+                    const name = ability_bonuses[index].ability_score.index;
+                    const amount = ability_bonuses[index].bonus;
+                    const kvp = {name:amount};
+                    bonuses.push(kvp);
+                }
+
+                var racials=document.getElementById("racialTraits");
+                racials.innerHTML="<br><b>Because of your race, </b><br>"
+
+                racials.innerHTML+="You have a speed of: "+speed+"ft/turn <br><br>";
+                racials.innerHTML+="You know the following languages: <br>";
+                for (let index = 0; index < languages.length; index++) {
+                    racials.innerHTML+= languages[index].name+"<br>";
+                    
+                }
+
+                racials.innerHTML+="<br> You have the following traits: <br>";
+                for (let index = 0; index < traits.length; index++) {
+                    racials.innerHTML+= traits[index].name+"<br>";
+                    
+                }
+
+                racials.innerHTML+="<br> You are naturally proficient in the following: <br>";
+                for (let index = 0; index < start_profs.length; index++) {
+                    racials.innerHTML+= start_profs[index].name+"<br>";
+                    
+                }
+                })
+            
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    }
+
     function addLevels()
     {
         levels = [];
@@ -211,21 +265,21 @@
 
                 var selectSkills = document.getElementById("selectSkills");
                 selectSkills.innerHTML="";
-                var li = document.createElement('li');
+                
 
                 for (let index = 0; index < skills.length; index++) {
                     var checkbox = document.createElement('input');
                     checkbox.type = "checkbox";
                     checkbox.value = 1;
                     checkbox.name = skills[index].index;
-                    li.appendChild(checkbox);
-                    li.appendChild(document.createTextNode(skills[index].name));
+                    selectSkills.appendChild(checkbox);
+                    selectSkills.appendChild(document.createTextNode(skills[index].name));
+                    selectSkills.innerHTML+="<br>"
                 }
-                selectSkills.append(li);
                 
                 var profs = document.getElementById("profs");
                 profs.innerHTML="";
-                profs.innerHTML += "<br>You are proficient with the following items: <br>"
+                profs.innerHTML += "<br> <b> Because of your class </b><br><br>You are proficient with the following items: <br>"
                 for (let index = 0; index < proficiencies.length; index++) {
                     profs.innerHTML+= proficiencies[index].name + "<br>";
                     
@@ -275,10 +329,13 @@
                 var fts = document.getElementById("feats");
                 fts.innerHTML="";
                 fts.innerHTML+= "<br> You have the following features (consult a 5e manual for more info) <br>";
-                for (let index = 0; index < features.length; index++) {
+                if(features.length>0)
+                {
+                    for (let index = 0; index < features.length; index++) {
                     fts.innerHTML+=features[index].name+"<br>"; 
-                    
                 }
+                }
+
 
                 var sp = document.getElementById("spells");
                 sp.innerHTML="";
@@ -296,18 +353,42 @@
                     }
                 }
                 sa = document.getElementById("spellAmount");
-                sa.innerHTML= "<br>You may choose up to "+spellno+" spells, in the proportion specified above <br>";
+                sa.innerHTML= "<br>You may choose up to "+spellno+" spells, in the proportion specified above <br><br>";
+
+                var selectSpells = document.getElementById("selectSpells");
 
                 for (const key in spellLevels) {
-                    spellNames=[];
                         spellLists = getSpellsByLevel(userClass,key);
                         spellLists.then((a) => {
+                            spellNames=[];
                             for (const name in a) {
-                                console.log(name);
                                 spellNames.push(a[name].name);
                                     
                             }
-                            addToSelect(spellNames,"selectSpells");
+                            if(document.getElementById("level"+key)==null)
+                            {
+                                var div = document.createElement('div');
+                                div.id = 'level'+key;
+                                div.innerHTML= "Level "+key+"<br>";
+                            }
+                            else{
+                                var div = document.getElementById("level"+key);
+                                div.innerHTML= "Level "+key+"<br>";
+                                
+                            }
+                                
+
+                            for (let index = 0; index < spellNames.length; index++) {
+                                var checkbox = document.createElement('input');
+                                checkbox.type = "checkbox";
+                                checkbox.value = 1;
+                                checkbox.name = spellNames[index];
+                                div.appendChild(checkbox);
+                                div.appendChild(document.createTextNode(spellNames[index]));
+                                div.innerHTML += "<br>"
+                            }
+                            div.innerHTML += "<br>"
+                            selectSpells.append(div);
                         });
                         
                     }
@@ -316,6 +397,7 @@
 
             }
                 var cs = document.getElementById("classSpecs");
+                cs.innerHTML="";
                 cs.innerHTML="Any other class variables or restrictions (i.e Wild Shape's restrictions) are shown here:"
                 for (let index = 0; index < Object.values(class_specifics).length; index++) {
                     if(Object.values(class_specifics)[index]!=0 || Object.values(class_specifics)[index]!="[]" )
