@@ -1,10 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-var mongoose = require('mongoose');
-const uri = "";
-   // mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-   // var db = mongoose.connection;
-   // db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
+const uri = "mongodb+srv://dndadmin:.DnDadm1n.@proyectofinal.heiln.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 module.exports = {
     dbConnect:  async function dbConnect(body) {
@@ -23,7 +18,8 @@ module.exports = {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
           const collection = client.db("Users").collection("characters");
-          await collection.insertOne({ name: body.name, class: body.class,level:body.level,race:body.race,ability_scores:body.abilityScores,s_throws:body.saveThrows, skills:body.skills,proficiencies:body.proficiencies,hp:body.hp});          
+          console.log(body);
+          await collection.insertOne({ name: body.name, class: body.class,level:body.level,race:body.race,ability_scores:body.abilityScores,s_throws:body.saveThrows, skills:body.skills,proficiencies:body.proficiencies,hp:body.hp,languages:body.languages,traits:body.traits,speed:body.speed,ab:body.ability_bonus,pb:body.prof_bonus,feats:body.feats,spells:body.spells,spell_slots:body.spellSlots});          
           client.close();
         } catch (error) {
             console.log(error);

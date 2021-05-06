@@ -28,6 +28,11 @@ app.post('/dbsignup', function(req, res) {
     }
 });
 
+app.post('/characterInsert', function(req, res) {
+    var ok = db.characterInsert(req.body);
+    res.sendFile(path.join(__dirname+'/public/main.html'));
+});
+
 app.post('/dblogin', async function(req, res) {
     var ok = await db.dbGetConnect(req.body);
     if(ok!=0){

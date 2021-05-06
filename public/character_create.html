@@ -7,8 +7,6 @@
     <title>Character Creation</title>
 </head>
 <body>
-    <form action="/characterInsert" method="POST">
-    
     <div>
         Select your level: 
         <div>
@@ -39,7 +37,7 @@
          
     </div>
 
-    <div id="selectSkills">
+    <div id="selectSkills" onchange="onSkillSelect(0,this)">
         
     </div>
 
@@ -78,7 +76,7 @@
     <div id="spellAmount">
 
     </div>
-    <div id="selectSpells">
+    <div id="selectSpells" onchange="onSpellSelect(this)">
 
     </div>
 
@@ -129,8 +127,7 @@
         </select>
      </div>
 
-    
-    </form>
+     <button type="submit" onclick="preSubmit()">Submit</button>
 </body>
 </html>
 
@@ -138,10 +135,16 @@
     window.onload = function() {
   getClasses();
   getRaces();
+  character.proficiencies = [];
+  character.abilityScores = [];
   addLevels();
   pointBuySetup();
   
 };
+    character = {};
+    class_profs = [];
+    race_profs = [];
+    skills = [];
 
     function getClasses() {
         var classes = [];
@@ -153,7 +156,7 @@
                     classes.push(element.index);
                 }})
             .then(()=>{
-                addToSelect(classes,"selectClass")
+                addToSelect(classes,"selectClass");
                 })
             
             .catch(error => {
@@ -197,6 +200,7 @@
         return fetch("https://www.dnd5eapi.co/api/races/"+userRace)
             .then(response => response.json())
             .then(responseJson => {
+                
                 var ability_bonuses = responseJson.ability_bonuses;
                 var speed = responseJson.speed;
                 var start_profs = responseJson.starting_proficiencies;
@@ -211,26 +215,32 @@
                     bonuses.push(kvp);
                 }
 
+                character.race=userRace;
+                character.speed= speed;
+                character.ability_bonuses = ability_bonuses;
+                character.languages = [];
+                character.traits = [];
+                race_profs = [];
                 var racials=document.getElementById("racialTraits");
-                racials.innerHTML="<br><b>Because of your race, </b><br>"
+                racials.innerHTML="<br><b>Because of your race, </b><br>";
 
                 racials.innerHTML+="You have a speed of: "+speed+"ft/turn <br><br>";
                 racials.innerHTML+="You know the following languages: <br>";
                 for (let index = 0; index < languages.length; index++) {
                     racials.innerHTML+= languages[index].name+"<br>";
-                    
+                    character.languages.push(languages[index].name);
                 }
 
                 racials.innerHTML+="<br> You have the following traits: <br>";
                 for (let index = 0; index < traits.length; index++) {
                     racials.innerHTML+= traits[index].name+"<br>";
-                    
+                    character.traits.push(traits[index].name);
                 }
 
                 racials.innerHTML+="<br> You are naturally proficient in the following: <br>";
                 for (let index = 0; index < start_profs.length; index++) {
                     racials.innerHTML+= start_profs[index].name+"<br>";
-                    
+                    race_profs.push(start_profs[index].name);
                 }
                 })
             
@@ -259,7 +269,15 @@
                 var proficiencies = responseJson.proficiencies;
                 var saving_throws = responseJson.saving_throws;
                 var starting_equipment = responseJson.starting_equipment;
-                
+                var hitdice = responseJson.hit_die;
+
+                character.hp=hitdice;
+                character.class=userClass;
+                class_profs = [];
+                character.saveThrows = [];
+                character.equipment = [];
+                character.proficiencies.amount = prof_amount;
+
                 var profText = document.getElementById("skillChoose");
                 profText.innerHTML="You are proficient in up to "+prof_amount+" of the following:";
 
@@ -269,6 +287,7 @@
 
                 for (let index = 0; index < skills.length; index++) {
                     var checkbox = document.createElement('input');
+                    checkbox.id = "skillCheckbox"+index;
                     checkbox.type = "checkbox";
                     checkbox.value = 1;
                     checkbox.name = skills[index].index;
@@ -282,7 +301,7 @@
                 profs.innerHTML += "<br> <b> Because of your class </b><br><br>You are proficient with the following items: <br>"
                 for (let index = 0; index < proficiencies.length; index++) {
                     profs.innerHTML+= proficiencies[index].name + "<br>";
-                    
+                    class_profs.push(proficiencies[index].name);
                 }
 
                 var saves = document.getElementById("throws");
@@ -291,7 +310,8 @@
 
                 for (let index = 0; index < saving_throws.length; index++) {
                     saves.innerHTML+= saving_throws[index].name + "<br>";
-                    
+
+                    character.saveThrows.push(saving_throws[index].name);
                 }
 
                 var equip = document.getElementById("equipment");
@@ -300,7 +320,7 @@
 
                 for (let index = 0; index < starting_equipment.length; index++) {
                     equip.innerHTML+= starting_equipment[index].equipment.name + "<br>";
-                    
+                    character.equipment.push(starting_equipment[index].equipment.name);
                 }
                 
             })
@@ -311,6 +331,7 @@
 
      function getLevel(userClass,level) {
         if(userClass!="Choose a class") {
+            character.level = level;
         return fetch("https://www.dnd5eapi.co/api/classes/"+userClass+"/levels/"+level)
             .then(response => response.json())
             .then(responseJson => {
@@ -319,6 +340,11 @@
                 var class_specifics = responseJson.class_specific;  
                 var ability_bonus = responseJson.ability_score_bonuses;
                 var prof_bonus = responseJson.prof_bonus;
+
+                character.ability_bonus = ability_bonus;
+                character.prof_bonus = prof_bonus;
+                character.feats = [];
+                character.spellSlots = [];
 
                 var ab = document.getElementById("abilityBonus")
                 ab.innerHTML= "<br>Your ability scores (INT, DEX, etc) get a bonus of +"+ability_bonus;
@@ -332,7 +358,8 @@
                 if(features.length>0)
                 {
                     for (let index = 0; index < features.length; index++) {
-                    fts.innerHTML+=features[index].name+"<br>"; 
+                    fts.innerHTML+=features[index].name+"<br>";
+                    character.feats.push(features[index].name);
                 }
                 }
 
@@ -348,10 +375,12 @@
                     if(Object.values(spells)[index]!=0)
                     {
                         sp.innerHTML+= "<br>Level "+index + ": "+Object.values(spells)[index];
+                        character.spellSlots.push(Object.values(spells)[index]);
                         spellLevels.push(index);
                         spellno+=parseInt(Object.values(spells)[index]);
                     }
                 }
+                
                 sa = document.getElementById("spellAmount");
                 sa.innerHTML= "<br>You may choose up to "+spellno+" spells, in the proportion specified above <br><br>";
 
@@ -414,6 +443,89 @@
         }
      }
 
+     function onSpellSelect(node)
+     {
+        var checked;
+        var checkedLevels = [];
+        var spellList = [];
+        var selects= node.querySelectorAll("#selectSpells > div");
+        for (let index = 0; index < selects.length; index++) { 
+            checked = 0;
+            var levelSelects = selects[index].querySelectorAll("input");
+            for (let index = 0; index < levelSelects.length; index++) {
+                if(levelSelects[index].checked)
+                {
+                checked++;
+                spellList.push(levelSelects[index].name);
+                }
+                
+            }
+            if(checked>=character.spellSlots[index])
+            {
+                for (let index = 0; index < levelSelects.length; index++) {
+                    if(!levelSelects[index].checked)
+                    {
+                        levelSelects[index].disabled=true;
+                    }
+                    
+                }
+            }
+            else
+            {
+                for (let index = 0; index < levelSelects.length; index++) {
+                    levelSelects[index].disabled=false;
+                        
+                    }
+            }
+            
+        }
+        character.spells = spellList;
+
+     }
+
+    function preSubmit()
+    {
+        skills.push(class_profs)
+        skills.push(race_profs)
+        character.proficiencies = skills;
+        fetch("/post/data/here", {
+            method: "POST", 
+            body: JSON.stringify(character)
+            });
+    }
+
+     function onSkillSelect(checked,node)
+     {
+        skills = [];
+        var selects= node.querySelectorAll("#selectSkills > input");
+        for (let index = 0; index < selects.length; index++) {
+            if(selects[index].checked)
+            {
+                checked++;
+                skills.push(selects[index].name);
+            }
+            
+        }
+        if(checked>=character.proficiencies.amount)
+            {
+                for (let index = 0; index < selects.length; index++) {
+                    if(!selects[index].checked)
+                    {
+                        selects[index].disabled=true;
+                    }
+                    
+                }
+            }
+        else
+        {
+            for (let index = 0; index < selects.length; index++) {
+                        selects[index].disabled=false;
+                    
+                }
+        }
+
+     }
+
      function pointBuySetup()
      {
          var selects= document.querySelectorAll("#selectScores > select");
@@ -437,7 +549,7 @@
 
          for (let index = 0; index < selects.length; index++) {
              currPoints+=parseInt(selects[index].value);
-    
+             character.abilityScores[selects[index].name] = selects[index].value;
          }
          var explainerText= document.querySelector("#selectScores > div");
          var calc = (basePoints+points-currPoints);
