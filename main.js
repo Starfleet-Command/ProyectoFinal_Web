@@ -29,7 +29,8 @@ app.post('/dbsignup', function(req, res) {
 });
 
 app.post('/characterInsert', function(req, res) {
-    var ok = db.characterInsert(req.body);
+    console.log(req);
+    db.characterInsert(req);
     res.sendFile(path.join(__dirname+'/public/main.html'));
 });
 

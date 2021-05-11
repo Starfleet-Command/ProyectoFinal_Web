@@ -488,7 +488,7 @@
         skills.push(class_profs)
         skills.push(race_profs)
         character.proficiencies = skills;
-        fetch("/post/data/here", {
+        fetch("/characterInsert", {
             method: "POST", 
             body: JSON.stringify(character)
             });
