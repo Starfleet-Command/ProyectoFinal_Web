@@ -7,6 +7,10 @@
     <title>Character Creation</title>
 </head>
 <body>
+    <div id="characterName">
+        Enter the character's name: 
+        <input type="text" placeholder="Eren Yaeger" onchange="setName(this.value)">
+    </div>
     <div>
         Select your level: 
         <div>
@@ -127,7 +131,7 @@
         </select>
      </div>
 
-     <button type="submit" onclick="preSubmit()">Submit</button>
+     <button type="submit" id="formsubmit" onclick="preSubmit()">Submit</button>
 </body>
 </html>
 
@@ -145,6 +149,11 @@
     class_profs = [];
     race_profs = [];
     skills = [];
+
+    function setName(name)
+    {
+        character.name=name;
+    }
 
     function getClasses() {
         var classes = [];
@@ -485,11 +494,17 @@
 
     function preSubmit()
     {
+        skills = [];
         skills.push(class_profs)
         skills.push(race_profs)
         character.proficiencies = skills;
         fetch("/characterInsert", {
-            method: "POST", 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: "POST",
+            successRedirect : '/', 
             body: JSON.stringify(character)
             });
     }
@@ -536,7 +551,7 @@
             }
          for (let index = 0; index < selects.length; index++) {
              addToSelect(points,selects[index].id);
-             
+             character.abilityScores.push(selects[index].value);
          }
      }
 
@@ -549,11 +564,20 @@
 
          for (let index = 0; index < selects.length; index++) {
              currPoints+=parseInt(selects[index].value);
-             character.abilityScores[selects[index].name] = selects[index].value;
+             character.abilityScores[index] = selects[index].value;
          }
          var explainerText= document.querySelector("#selectScores > div");
          var calc = (basePoints+points-currPoints);
          explainerText.innerHTML= "Select your Ability Scores! Remaining Points:"+calc+"/27";
+
+         var btn = document.getElementById("formsubmit");
+         if(calc<0)
+         {
+             btn.disabled = true;
+         }
+         else {
+             btn.disabled= false;
+         }
      }
 
      function getSpellsByLevel(userClass,level) {

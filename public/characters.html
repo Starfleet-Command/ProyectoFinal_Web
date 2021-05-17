@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <a href="/createcharacter" class="button">Create a Character</a>
+    </div>
+    You have the following characters:
+
+    <div id="characters">
+
+    </div>
+</body>
+</html>
+
+<script>
+window.onload = function() {
+  var chars = getCharacters();
+  displayCharacters(chars);
+};
+
+function getCharacters()
+{
+    return fetch("/getcharacters")
+            .then(response => response.json())
+            .then(responseJson => { 
+                var chars = responseJson;
+                return chars;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+}
+
+function displayCharacters(chars)
+{
+    var htmlDisplay = document.getElementById("characters");
+    htmlDisplay.innerHTML= "";
+    for (let index = 0; index < chars.length; index++) {
+        htmlDisplay.innerHTML += chars[index].name;
+    }
+}
+
+
+
+</script>
+
