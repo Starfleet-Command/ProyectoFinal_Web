@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import LevelSelection from './LevelSelection';
+import ClassSelection from './ClassSelection';
 
 class CharacterCreate extends Component {
     render() {
         return (
             <div>
                 <title>Character Creation</title>
-                <LevelSelection />
+                {/*<LevelSelection />*/}
+                <ClassSelection />
             </div>
         );
     }
