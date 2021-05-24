@@ -1,4 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 const uri = "";
 
 module.exports = {
@@ -20,10 +21,10 @@ module.exports = {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
             const collection = client.db("Users").collection("characters");
-            var items = await collection.find({}).toArray();
-            console.log(items);
-            client.close();
-            return items;
+            var data = await collection.find({}).toArray();
+                return data;
+            
+        
         }
         catch(error) {
             console.error(error);
@@ -37,7 +38,7 @@ module.exports = {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
             const collection = client.db("Users").collection("characters");
-            await collection.deleteOne({name:request.body.name});
+            await collection.deleteOne({id:request.body.id});
             client.close();
         }
         catch(error) {
@@ -52,8 +53,21 @@ module.exports = {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
             const collection = client.db("Users").collection("characters");
-            await collection.updateOne({name:request.body.oldName},{ $set: {name: request.body.newName}});
-            client.close();
+            console.log(request.body.id);
+            const updateDoc = {
+
+                $set: {
+                  "name": request.body.name,
+                },};
+            const filter = {_id:ObjectID(request.body.id) };
+            const options = { upsert: false };
+            const result = await collection.updateOne(filter,updateDoc,options);
+            console.log(
+
+                `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+          
+              );        
+            await client.close();
         }
         catch(error) {
             console.error(error);

@@ -34,18 +34,21 @@ app.post('/characterInsert', function(req, res) {
 });
 
 app.get('/getcharacters', function(req, res) {
-    var ppl = db.getCharacters();
-    return ppl;
+    db.getCharacters()
+    .then(response => {console.log(response);
+        res.json(response);})
+    
+    
 });
 
 app.post('/characterDelete', function(req, res) {
     db.delCharacter(req);
-    res.sendFile(path.join(__dirname+'/public/characters.html'));
+    res.status(200);
 });
 
 app.post('/characterEdit', function(req, res) {
     db.modCharacter(req);
-    res.sendFile(path.join(__dirname+'/public/characters.html'));
+    res.status(200);
 });
 
 

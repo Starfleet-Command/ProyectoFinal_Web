@@ -13,15 +13,28 @@
     You have the following characters:
 
     <div id="characters">
+        <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Race</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody id="charTable">
+            </tbody>
+          </table>
 
     </div>
 </body>
 </html>
 
 <script>
+
 window.onload = function() {
-  var chars = getCharacters();
-  displayCharacters(chars);
+  getCharacters()
+  .then(chars =>displayCharacters(chars));
 };
 
 function getCharacters()
@@ -37,12 +50,46 @@ function getCharacters()
             });
 }
 
+function deleteChar(id)
+{
+    return fetch("/characterDelete", {
+            method: "POST",
+            successRedirect : '/', 
+            body: JSON.stringify(id)
+            });
+}
+
+function editChar(id)
+{
+    var row = document.getElementById(id);
+    row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
+}
+
+function sendEdit(id)
+{
+    var data = {};
+    data.id=id;
+    var nameInput = document.getElementById('newName').value;
+    data.name=nameInput;
+    console.log(data);
+    return fetch("/characterEdit", {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: "POST",
+            successRedirect : '/', 
+            body: JSON.stringify(data)
+            });
+}
+
 function displayCharacters(chars)
 {
-    var htmlDisplay = document.getElementById("characters");
-    htmlDisplay.innerHTML= "";
+    var htmlDisplay = document.getElementById("charTable");
     for (let index = 0; index < chars.length; index++) {
-        htmlDisplay.innerHTML += chars[index].name;
+        var delbtn = " <button type='submit' onclick='deleteChar(\""+ chars[index]._id +"\")'>Delete</button>";
+        var editbtn = " <button type='submit' onclick='editChar(\""+ chars[index]._id +"\")'>Edit</button>";
+        htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td>"+ delbtn + editbtn+" </tr>";
     }
 }
 
