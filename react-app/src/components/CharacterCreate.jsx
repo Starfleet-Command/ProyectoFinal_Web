@@ -27,9 +27,10 @@ class ClassSelection extends Component {
 
     handleChange(event) {
         this.setState({
-            input: event.target.value // Also call getclassinfo
+            input: event.target.value 
         })
 
+        this.getClassInfo(this.input);
         this.props.parentCallback(this.input);
     }
 
@@ -324,6 +325,103 @@ class LevelSelection extends Component {
     }
 };
 
+class RaceSelection extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            race: ''
+        }
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({
+            race: event.target.value
+        })
+
+        this.getRaceInfo(this.race);
+    }
+
+    async getRaceInfo(race){
+        if(race!=="Choose your race")
+        {
+            return fetch("https://www.dnd5eapi.co/api/races/"+race)
+                .then(response => response.json())
+                .then(responseJson => {
+                    
+                    var ability_bonuses = responseJson.ability_bonuses;
+                    var speed = responseJson.speed;
+                    var start_profs = responseJson.starting_proficiencies;
+                    var languages = responseJson.languages;
+                    var traits = responseJson.traits;
+
+                    var bonuses = []
+                    for (let index = 0; index < ability_bonuses.length; index++) {
+                        // const name = ability_bonuses[index].ability_score.index;
+                        const amount = ability_bonuses[index].bonus;
+                        const kvp = {name:amount};
+                        bonuses.push(kvp);
+                    }
+
+                    character.race=race;
+                    character.speed= speed;
+                    character.ability_bonuses = ability_bonuses;
+                    character.languages = [];
+                    character.traits = [];
+                    var race_profs = [];
+                    var racials=document.getElementById("racialTraits");
+                    racials.innerHTML="<br><b>Because of your race, </b><br>";
+
+                    racials.innerHTML+="You have a speed of: "+speed+"ft/turn <br><br>";
+                    racials.innerHTML+="You know the following languages: <br>";
+                    for (let index = 0; index < languages.length; index++) {
+                        racials.innerHTML+= languages[index].name+"<br>";
+                        character.languages.push(languages[index].name);
+                    }
+
+                    racials.innerHTML+="<br> You have the following traits: <br>";
+                    for (let index = 0; index < traits.length; index++) {
+                        racials.innerHTML+= traits[index].name+"<br>";
+                        character.traits.push(traits[index].name);
+                    }
+
+                    racials.innerHTML+="<br> You are naturally proficient in the following: <br>";
+                    for (let index = 0; index < start_profs.length; index++) {
+                        racials.innerHTML+= start_profs[index].name+"<br>";
+                        race_profs.push(start_profs[index].name);
+                    }
+                    })
+                
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+
+    render() {
+        return (
+            <FormControl className={useStyles.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Race</InputLabel>
+                <Select value={this.state.race} onChange={this.handleChange}>
+                    <MenuItem value=""><em>None</em></MenuItem>
+                    <MenuItem value="dragonborn">Dragonborn</MenuItem>
+                    <MenuItem value="dwarf">Dwarf</MenuItem>
+                    <MenuItem value="elf">Elf</MenuItem>
+                    <MenuItem value="gnome">Gnome</MenuItem>
+                    <MenuItem value="half-elf">Half-Elf</MenuItem>
+                    <MenuItem value="half-orc">Half-Orc</MenuItem>
+                    <MenuItem value="halfling">Halfling</MenuItem>
+                    <MenuItem value="human">Human</MenuItem>
+                    <MenuItem value="tiefling">Tiefling</MenuItem>
+                </Select>
+                <FormHelperText>Select your race</FormHelperText>
+            </FormControl>
+        );
+    }
+};
+
 class CharacterCreate extends Component {
     constructor(props) {
         super(props);
@@ -352,6 +450,8 @@ class CharacterCreate extends Component {
                 {userClass}
 
                 <LevelSelection parentToChild = {userClass}/>
+
+                <RaceSelection />
             </div>
         );
     }
