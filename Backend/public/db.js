@@ -41,6 +41,21 @@ module.exports = {
             console.error(error);
             return 0;
         }
+    },
+
+    delCharacter: async function delCharacter(request)
+    {
+        try {
+            const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
+            const collection = client.db("Users").collection("characters");
+            await collection.deleteOne({name:request.body.name});
+            client.close();
+        }
+        catch(error) {
+            console.error(error);
+            return 0;
+        }
+
     }
 };   
 
