@@ -13,6 +13,12 @@ const useStyles = makeStyles((theme) => ({
 
 var character = {};
 var class_profs = [];
+// getClasses(); // These functions help populate the options for classes, races, etc
+// getRaces();
+character.proficiencies = [];
+character.abilityScores = [];
+// addLevels();
+// pointBuySetup();
 
 class ClassSelection extends Component {
     constructor(props) {
@@ -23,6 +29,7 @@ class ClassSelection extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.fillSkillChoose = this.fillSkillChoose.bind(this);
     }
 
     handleChange(event) {
@@ -30,16 +37,39 @@ class ClassSelection extends Component {
             input: event.target.value 
         })
 
-        this.getClassInfo(this.input);
+        // console.log(event);
+        this.getClassInfo(event.target.value);
         this.props.parentCallback(this.input);
     }
+
+    fillSkillChoose(props) {
+        return (
+            <div>
+                <p>
+                    You are proficient in up to {props.prof_amount} of the following
+                </p>
+            </div>
+        );
+    }
+
+    // fillProfs(props) {
+    //     return (
+    //         <div id="profs">
+    //             <br> <b> Because of your class </b>
+    //             <br>
+    //             <br> You are proficient with the following items: <br>
+    //         </div>
+    //     );
+    // }
 
     async getClassInfo(input) {
         return fetch("https://www.dnd5eapi.co/api/classes/"+input)
             .then(response => response.json())
             .then(responseJson => {
+                // console.log(responseJson);
                 var prof_amount = responseJson.proficiency_choices[0].choose;
                 var skills = responseJson.proficiency_choices[0].from;
+                // console.log(prof_amount);
                 var proficiencies = responseJson.proficiencies;
                 var saving_throws = responseJson.saving_throws;
                 var starting_equipment = responseJson.starting_equipment;
@@ -51,9 +81,13 @@ class ClassSelection extends Component {
                 character.saveThrows = [];
                 character.equipment = [];
                 character.proficiencies.amount = prof_amount;
+                
+                // console.log(prof_amount);
 
-                var profText = document.getElementById("skillChoose");
-                profText.innerHTML="You are proficient in up to "+prof_amount+" of the following:";
+                this.fillSkillChoose(prof_amount);
+
+                // var profText = document.getElementById("skillChoose");
+                // profText.innerHTML="You are proficient in up to "+prof_amount+" of the following:";
 
                 var selectSkills = document.getElementById("selectSkills");
                 selectSkills.innerHTML="";
