@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-const uri = "";
+const uri = "mongodb+srv://dndadmin:.DnDadm1n.@proyectofinal.heiln.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 module.exports = {
 

@@ -56,7 +56,8 @@ function deleteChar(id)
             method: "POST",
             successRedirect : '/', 
             body: JSON.stringify(id)
-            });
+            })
+    .then(window.location.reload(false))
 }
 
 function editChar(id)
@@ -78,9 +79,9 @@ function sendEdit(id)
             'Content-Type': 'application/json'
             },
             method: "POST",
-            successRedirect : '/', 
             body: JSON.stringify(data)
-            });
+            })
+    .then(window.location.reload(false))
 }
 
 function displayCharacters(chars)
