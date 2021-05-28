@@ -74,20 +74,6 @@
                 <tbody id="charTable">
                 </tbody>
             </table>
-            
-            <!-- <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Class</th>
-                    <th>Race</th>
-                    <th>Level</th>
-                </tr>
-                </thead>
-
-                <tbody id="charTable">
-                </tbody>
-            </table> -->
         </div>
     </body>
 </html>
@@ -124,7 +110,8 @@ function deleteChar(id)
 function editChar(id)
 {
     var row = document.getElementById(id);
-    row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
+    row.innerHTML+="<input type='text' class='form-control' id='newName' placeholder='New name'>" + "<button class='btn btn-danger' type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
+    //row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
 }
 
 function sendEdit(id)
