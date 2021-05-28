@@ -68,6 +68,7 @@
                     <th>Class</th>
                     <th>Race</th>
                     <th>Level</th>
+                    <th>Buttons</th>
                     </tr>
                 </thead>
     
@@ -111,7 +112,7 @@ function editChar(id)
 {
     var row = document.getElementById(id);
     row.innerHTML+="<input type='text' class='form-control' id='newName' placeholder='New name'>" + "<button class='btn btn-danger' type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
-    //row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
+    // row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
 }
 
 function sendEdit(id)
@@ -136,9 +137,9 @@ function displayCharacters(chars)
 {
     var htmlDisplay = document.getElementById("charTable");
     for (let index = 0; index < chars.length; index++) {
-        var delbtn = " <button type='submit' onclick='deleteChar(\""+ chars[index]._id +"\")'>Delete</button>";
-        var editbtn = " <button type='submit' onclick='editChar(\""+ chars[index]._id +"\")'>Edit</button>";
-        htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td>"+ delbtn + editbtn+" </tr>";
+        var delbtn = " <button class='btn btn-danger' type='submit' onclick='deleteChar(\""+ chars[index]._id +"\")'>Delete</button>";
+        var editbtn = " <button class='btn btn-danger' type='submit' onclick='editChar(\""+ chars[index]._id +"\")'>Edit</button>";
+        htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td> <td>"+ delbtn + editbtn+"</td> </tr>";
     }
 }
 </script>
