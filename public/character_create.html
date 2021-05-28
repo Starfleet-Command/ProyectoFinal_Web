@@ -1,142 +1,251 @@
-
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Creation</title>
-</head>
-<body>
-    <div id="characterName">
-        Enter the character's name: 
-        <input type="text" placeholder="Eren Yaeger" onchange="setName(this.value)">
-    </div>
-    <div>
-        Select your level: 
-        <div>
-            <select id="selectLevel" name="level" onchange="getLevel(document.getElementById('selectClass').value,this.value)">
-            </select>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <title>Character Creation</title>
+        <style>
+            .logo {
+                width: 600px;
+                height: 400px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            input[type=checkbox] {
+                margin-right: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <img src="DnD_logo.jpg" class="logo" alt="Photo of the Dungeons and Dragons logo">
+
+        <h1 class="display-6">Create your character!</h1>
+
+        <br>
+        <br>
+
+        <!-- Container class div that encloses the character name input -->
+        <div class="container">
+            <div class="row"> 
+                <div class="col">
+                </div>
+
+                <div class="col">
+                    <div class="characterName">
+                        <label for="exampleFormControlInput1" class="form-label">Enter the character's name:</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Eren Yaeger" onchange="setName(this.value)">
+                    </div>
+                </div>
+
+                <div class="col">
+                </div>
+            </div>
         </div>
-    </div>
-    <br>
-    <div>
-        Select your class: 
-        <div>
-            <select id="selectClass" name="class" onchange="getClassInfo(this.value),getLevel(this.value,document.getElementById('selectLevel').value)">
-                <option>Choose a class</option>
-            </select>
-        </div>
-    </div>
-    <br>
-    <div>
-        Select your race: 
-        <div>
-            <select id="selectRace" name="race" onchange="getRaceInfo(this.value)">
-                <option>Choose a race</option>
-            </select>
-        </div>
-    </div>
 
-    <div id="skillChoose">
-         
-    </div>
-
-    <div id="selectSkills" onchange="onSkillSelect(0,this)">
-        
-    </div>
-
-    <div id="racialTraits">
-
-    </div>
-
-    <div id="profs">
-        
-    </div>
-
-    <div id="throws">
-        
-    </div>
-
-    <div id="equipment">
-        
-    </div>
-
-    <div id="level">
-        Your class has the following attributes at the chosen level:
-    </div>
-
-    <div id="scoreBonus">
-        
-    </div>
-
-    <div id="abilityBonus">
-        
-    </div>
-
-    <div id="spells">
-        
-    </div>
-
-    <div id="spellAmount">
-
-    </div>
-    <div id="selectSpells" onchange="onSpellSelect(this)">
-
-    </div>
-
-    <div id="feats">
-        
-    </div>
-
-    <div id="classSpecs">
-        
-    </div>
-
-
-    <br>
-
-     <div id="selectScores" onchange="pointBuy()">
-         <div id="scoreVisual">
-            Select your Ability Scores! Remaining Points: 27/27
-         </div>
         <br>
-                               
-        <br>
-        Strength
-        <select name="Strength" id="str" >
-        
-        </select>
-        <br>
-        Dexterity
-        <select name="Dexterity" id="dex">
-          
-        </select>
-        <br>
-        Constitution
-        <select name="Constitution" id="con">
+
+        <!-- Container class div that encloses the level, class and race selection -->
+        <div class="container">
+            <div class="row align-items-start">
+            <div class="col">
+                Select your level
+                
+                <select id="selectLevel" name="level" class="form-select" aria-label="Default select example" 
+                onchange="getLevel(document.getElementById('selectClass').value,this.value)">
+                    <option selected>Choose one</option>
+                </select>
+            </div>
+
+            <div class="col">
+                Select your class
+
+                <select id="selectClass" name="class" class="form-select" aria-label="Default select example" 
+                onchange="getClassInfo(this.value),getLevel(this.value,document.getElementById('selectLevel').value)">
+                    <option selected>Choose one</option>
+                </select>
+            </div>
             
-        </select>
-        <br>
-        Intelligence
-        <select name="Intelligence" id="int">
-            
-        </select>
-        <br>
-        Wisdom
-        <select name="Wisdom" id="wis">
-        </select>
-        <br>
-        Charisma
-        <select name="Charisma" id="cha">
-        </select>
-     </div>
+            <div class="col">
+                Select your race:
 
-     <button type="submit" id="formsubmit" onclick="preSubmit()">Submit</button>
-</body>
+                <select id="selectRace" name="race" class="form-select" aria-label="Default select example" 
+                onchange="getRaceInfo(this.value)">
+                    <option selected>Choose one</option>
+                </select>
+            </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <!-- Container class div that encloses information regarding the skills to choose, proficiencies, and racial traits -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <!-- <div id="skillChoose" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div> -->
+                    <div id="selectSkills" class="shadow-none p-3 mb-5 bg-light rounded" onchange="onSkillSelect(0,this)">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="profs" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="racialTraits" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses information regarding throws and equipment -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <div id="throws" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="equipment" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses a single statement regarding the level attributes -->
+        <div class="container">
+            <div class="row"> 
+                <div class="col">
+                    <div id="level" class="shadow-sm p-3 mb-5 bg-body rounded">
+                        <b>Your class has the following attributes at the chosen level:</b>
+                    </div>
+                </div>
+
+                <div class="col">
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses information regarding the score and ability bonus -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <div id="scoreBonus" class="shadow-sm p-3 mb-5 bg-body rounded">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="abilityBonus" class="shadow-sm p-3 mb-5 bg-body rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses information regarding spells -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <div id="spells" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div>
+
+                <!-- <div class="col">
+                    <div id="spellAmount" class="shadow-none p-3 mb-5 bg-light rounded">
+                    </div>
+                </div> -->
+
+                <div class="col">
+                    <div id="selectSpells" class="shadow-none p-3 mb-5 bg-light rounded" onchange="onSpellSelect(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses information regarding feats, class specs, and score selection -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    <div id="feats" class="shadow-sm p-3 mb-5 bg-body rounded">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="classSpecs" class="shadow-sm p-3 mb-5 bg-body rounded">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div id="selectScores" class="shadow-sm p-3 mb-5 bg-body rounded" onchange="pointBuy()">
+                        <div id="scoreVisual">
+                            <b>Select your Ability Scores! Remaining Points: 27/27</b>
+                        </div>
+                        
+                        <br>
+
+                        Strength
+                        <select name="Strength" id="str" >
+                        
+                        </select>
+                        <br>
+                        Dexterity
+                        <select name="Dexterity" id="dex">
+                        
+                        </select>
+                        <br>
+                        Constitution
+                        <select name="Constitution" id="con">
+                            
+                        </select>
+                        <br>
+                        Intelligence
+                        <select name="Intelligence" id="int">
+                            
+                        </select>
+                        <br>
+                        Wisdom
+                        <select name="Wisdom" id="wis">
+                        </select>
+                        <br>
+                        Charisma
+                        <select name="Charisma" id="cha">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container class div that encloses a centered button -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                </div>
+
+                <div class="col text-center">
+                    <button class="btn btn-danger" type="submit" id="formsubmit" onclick="preSubmit()">Submit!</button>
+                </div>
+
+                <div class="col">
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
 
 <script>
-    window.onload = function() {
+  window.onload = function() {
   getClasses();
   getRaces();
   character.proficiencies = [];
@@ -231,7 +340,7 @@
                 character.traits = [];
                 race_profs = [];
                 var racials=document.getElementById("racialTraits");
-                racials.innerHTML="<br><b>Because of your race, </b><br>";
+                racials.innerHTML="<b>Because of your race,</b><br><br>";
 
                 racials.innerHTML+="You have a speed of: "+speed+"ft/turn <br><br>";
                 racials.innerHTML+="You know the following languages: <br>";
@@ -287,11 +396,11 @@
                 character.equipment = [];
                 character.proficiencies.amount = prof_amount;
 
-                var profText = document.getElementById("skillChoose");
-                profText.innerHTML="You are proficient in up to "+prof_amount+" of the following:";
+                // var profText = document.getElementById("skillChoose");
+                // profText.innerHTML="<b>You are proficient in up to "+prof_amount+" of the following:<b><br><br>";
 
                 var selectSkills = document.getElementById("selectSkills");
-                selectSkills.innerHTML="";
+                selectSkills.innerHTML="<b>You are proficient in up to "+prof_amount+" of the following:<b><br><br>";
                 
 
                 for (let index = 0; index < skills.length; index++) {
@@ -300,6 +409,7 @@
                     checkbox.type = "checkbox";
                     checkbox.value = 1;
                     checkbox.name = skills[index].index;
+                    // All the three lines of code below used to start with "selectSkills"
                     selectSkills.appendChild(checkbox);
                     selectSkills.appendChild(document.createTextNode(skills[index].name));
                     selectSkills.innerHTML+="<br>"
@@ -307,7 +417,7 @@
                 
                 var profs = document.getElementById("profs");
                 profs.innerHTML="";
-                profs.innerHTML += "<br> <b> Because of your class </b><br><br>You are proficient with the following items: <br>"
+                profs.innerHTML += "<b>Because of your class,</b><br><br>You are proficient with the following items: <br>"
                 for (let index = 0; index < proficiencies.length; index++) {
                     profs.innerHTML+= proficiencies[index].name + "<br>";
                     class_profs.push(proficiencies[index].name);
@@ -315,7 +425,7 @@
 
                 var saves = document.getElementById("throws");
                 saves.innerHTML="";
-                saves.innerHTML += "<br>You are proficient in the following saving throws: <br>"
+                saves.innerHTML += "<b>You are proficient in the following saving throws: <b><br><br>"
 
                 for (let index = 0; index < saving_throws.length; index++) {
                     saves.innerHTML+= saving_throws[index].name + "<br>";
@@ -325,7 +435,7 @@
 
                 var equip = document.getElementById("equipment");
                 equip.innerHTML="";
-                equip.innerHTML += "<br>You start with the following equipment: <br>"
+                equip.innerHTML += "<b>You start with the following equipment: <b><br><br>"
 
                 for (let index = 0; index < starting_equipment.length; index++) {
                     equip.innerHTML+= starting_equipment[index].equipment.name + "<br>";
@@ -356,14 +466,14 @@
                 character.spellSlots = [];
 
                 var ab = document.getElementById("abilityBonus")
-                ab.innerHTML= "<br>Your ability scores (INT, DEX, etc) get a bonus of +"+ability_bonus;
+                ab.innerHTML= "Your ability scores (INT, DEX, etc) get a bonus of +"+ability_bonus;
 
                 var pb = document.getElementById("scoreBonus")
-                pb.innerHTML= "<br>Skills you are proficient in get a bonus of +"+prof_bonus;
+                pb.innerHTML= "Skills you are proficient in get a bonus of +"+prof_bonus;
 
                 var fts = document.getElementById("feats");
                 fts.innerHTML="";
-                fts.innerHTML+= "<br> You have the following features (consult a 5e manual for more info) <br>";
+                fts.innerHTML+= "<b>You have the following features (consult a 5e manual for more info): <br><br>";
                 if(features.length>0)
                 {
                     for (let index = 0; index < features.length; index++) {
@@ -376,7 +486,7 @@
                 var sp = document.getElementById("spells");
                 sp.innerHTML="";
                 if(spells!=undefined){
-                    sp.innerHTML= "<br>You have the following spell slots (plus those added by your spellcasting modifier):";
+                    sp.innerHTML= "<b>You have the following spell slots (plus those added by your spellcasting modifier):<br>";
                     var spellLevels=[];
                     var spellLists = [];
                     var spellno = 0;
@@ -390,10 +500,11 @@
                     }
                 }
                 
-                sa = document.getElementById("spellAmount");
-                sa.innerHTML= "<br>You may choose up to "+spellno+" spells, in the proportion specified above <br><br>";
+                // sa = document.getElementById("spellAmount");
+                // sa.innerHTML= "<b>You may choose up to "+spellno+" spells, in the proportion specified to the left <br>";
 
                 var selectSpells = document.getElementById("selectSpells");
+                selectSpells.innerHTML = "<b>You may choose up to "+spellno+" spells, in the proportion specified to the left <br><br>";
 
                 for (const key in spellLevels) {
                         spellLists = getSpellsByLevel(userClass,key);
@@ -436,7 +547,7 @@
             }
                 var cs = document.getElementById("classSpecs");
                 cs.innerHTML="";
-                cs.innerHTML="Any other class variables or restrictions (i.e Wild Shape's restrictions) are shown here:"
+                cs.innerHTML="<b>Any other class variables or restrictions (i.e Wild Shape's restrictions) are shown here:<br>"
                 for (let index = 0; index < Object.values(class_specifics).length; index++) {
                     if(Object.values(class_specifics)[index]!=0 || Object.values(class_specifics)[index]!="[]" )
                     {
@@ -611,6 +722,4 @@
                 console.error(error);
             });
     }
-
- 
 </script>
