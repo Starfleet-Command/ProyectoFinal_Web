@@ -1,98 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" 
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <title>Edit/Delete Characters</title>
-    <style>
-        .logo {
-            width: 600px;
-            height: 400px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+            integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <title>Edit/Delete Characters</title>
+        <style>
+            .logo {
+                width: 600px;
+                height: 400px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
 
-        h1 {
-            text-align: center;
-        }
+            h1 {
+                text-align: center;
+            }
 
-        .lead {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <img src="DnD_logo.jpg" class="logo" alt="Photo of the Dungeons and Dragons logo">
+            .lead {
+                text-align: center;
+            }
+        </style>
+    </head>
 
-    <h1 class="display-6">Edit or delete a character</h1>
+    <body>
+        <img src="DnD_logo.jpg" class="logo" alt="Photo of the Dungeons and Dragons logo">
 
-    <br>
-    <br>
+        <h1 class="display-6">Edit or delete a character</h1>
 
-    <p class="lead">
-        (To create a new character click on the button below)
-    </p>
+        <br>
+        <br>
 
-    <!-- Container class div that encloses a centered button -->
-    <div class="container">
-        <div class="row align-items-start">
-            <div class="col">
-            </div>
+        <p class="lead">
+            (To create a new character click on the button below)
+        </p>
 
-            <div class="col text-center">
-                <a class="btn btn-danger" href="/createcharacter" role="button">Create a character</a>
-            </div>
+        <!-- Container class div that encloses a centered button -->
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                </div>
 
-            <div class="col">
+                <div class="col text-center">
+                    <a class="btn btn-danger" href="/createcharacter" role="button">Create a character</a>
+                </div>
+
+                <div class="col">
+                </div>
             </div>
         </div>
-    </div>
 
-    <br>
-    <br>
+        <br>
+        <br>
 
-    <p class="lead">
-        You have the following characters
-    </p>
+        <p class="lead">
+            You have the following characters
+        </p>
 
-    <div id="characters">
-        <table class="table table-striped">
-            <thead>
+        <div id="characters">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Race</th>
+                    <th>Level</th>
+                    </tr>
+                </thead>
+    
+                <tbody id="charTable">
+                </tbody>
+            </table>
+            
+            <!-- <table>
+                <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Class</th>
-                  <th>Race</th>
-                  <th>Level</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Race</th>
+                    <th>Level</th>
                 </tr>
-            </thead>
-  
-            <tbody id="charTable">
-            </tbody>
-        </table>
-        
-        <!-- <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Race</th>
-                <th>Level</th>
-              </tr>
-            </thead>
+                </thead>
 
-            <tbody id="charTable">
-            </tbody>
-        </table> -->
-    </div>
-</body>
+                <tbody id="charTable">
+                </tbody>
+            </table> -->
+        </div>
+    </body>
 </html>
 
 <script>
-
 window.onload = function() {
   getCharacters()
   .then(chars =>displayCharacters(chars));
@@ -154,8 +154,4 @@ function displayCharacters(chars)
         htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td>"+ delbtn + editbtn+" </tr>";
     }
 }
-
-
-
 </script>
-
