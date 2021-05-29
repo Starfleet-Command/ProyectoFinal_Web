@@ -119,8 +119,8 @@ function deleteChar(id)
 function editChar(id)
 {
     var row = document.getElementById(id);
+    
     row.innerHTML+="<div> <div class='input-group mb-3'> <input type='text' class='form-control' id='newName' placeholder='New name'> " + "<button class='btn btn-danger' type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button> </div> </div>"
-    // row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
 }
 
 function sendEdit(id)

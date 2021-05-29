@@ -92,8 +92,6 @@
         <div class="container">
             <div class="row align-items-start">
                 <div class="col">
-                    <!-- <div id="skillChoose" class="shadow-none p-3 mb-5 bg-light rounded">
-                    </div> -->
                     <div id="selectSkills" class="shadow-none p-3 mb-5 bg-light rounded" onchange="onSkillSelect(0,this)">
                     </div>
                 </div>
@@ -162,10 +160,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="col">
-                    <div id="spellAmount" class="shadow-none p-3 mb-5 bg-light rounded">
-                    </div>
-                </div> -->
 
                 <div class="col">
                     <div id="selectSpells" class="shadow-none p-3 mb-5 bg-light rounded" onchange="onSpellSelect(this)">
@@ -396,9 +390,6 @@
                 character.equipment = [];
                 character.proficiencies.amount = prof_amount;
 
-                // var profText = document.getElementById("skillChoose");
-                // profText.innerHTML="<b>You are proficient in up to "+prof_amount+" of the following:<b><br><br>";
-
                 var selectSkills = document.getElementById("selectSkills");
                 selectSkills.innerHTML="<b>You are proficient in up to "+prof_amount+" of the following:<b><br><br>";
                 
@@ -499,12 +490,9 @@
                         spellno+=parseInt(Object.values(spells)[index]);
                     }
                 }
-                
-                // sa = document.getElementById("spellAmount");
-                // sa.innerHTML= "<b>You may choose up to "+spellno+" spells, in the proportion specified to the left <br>";
 
                 var selectSpells = document.getElementById("selectSpells");
-                selectSpells.innerHTML = "<b>You may choose up to "+spellno+" spells, in the proportion specified to the left <br><br>";
+                selectSpells.innerHTML = "<b>You may choose up to "+spellno+" spells, in the proportion specified to the left. Paladin and Ranger Cantrips are not supported <br><br>";
 
                 for (const key in spellLevels) {
                         spellLists = getSpellsByLevel(userClass,key);
