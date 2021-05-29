@@ -12,7 +12,7 @@ module.exports = {
           await collection.insertOne({ name: body.name, class: body.class,level:body.level,race:body.race,ability_scores:body.abilityScores,s_throws:body.saveThrows, skills:body.skills,proficiencies:body.proficiencies,hp:body.hp,languages:body.languages,traits:body.traits,speed:body.speed,ab:body.ability_bonus,pb:body.prof_bonus,feats:body.feats,spells:body.spells,spell_slots:body.spellSlots});          
           client.close();
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     },
 
@@ -36,9 +36,15 @@ module.exports = {
     delCharacter: async function delCharacter(request)
     {
         try {
+            console.log(request.body.id);
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
             const collection = client.db("Users").collection("characters");
-            await collection.deleteOne({id:request.body.id});
+            const result = await collection.deleteOne({_id:ObjectID(request.body.id)});
+            console.log(
+
+                `deleted ${result.deletedCount} document(s)`,
+          
+              ); 
             client.close();
         }
         catch(error) {
@@ -53,7 +59,6 @@ module.exports = {
         try {
             const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true,});
             const collection = client.db("Users").collection("characters");
-            console.log(request.body.id);
             const updateDoc = {
 
                 $set: {

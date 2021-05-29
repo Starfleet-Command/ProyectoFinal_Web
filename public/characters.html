@@ -100,10 +100,14 @@ function getCharacters()
 
 function deleteChar(id)
 {
+    data = {};
+    data.id = id;
     return fetch("/characterDelete", {
-            method: "POST",
-            successRedirect : '/', 
-            body: JSON.stringify(id)
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            method: "POST", 
+            body: JSON.stringify(data),
             })
     .then(window.location.reload(false))
 }
@@ -121,7 +125,6 @@ function sendEdit(id)
     data.id=id;
     var nameInput = document.getElementById('newName').value;
     data.name=nameInput;
-    console.log(data);
     return fetch("/characterEdit", {
             headers: {
             'Content-Type': 'application/json'

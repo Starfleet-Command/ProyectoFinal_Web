@@ -618,6 +618,7 @@
             successRedirect : '/', 
             body: JSON.stringify(character)
             })
+        .then(window.location.replace("/"))
     }
 
      function onSkillSelect(checked,node)

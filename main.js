@@ -35,7 +35,7 @@ app.post('/characterInsert', function(req, res) {
 
 app.get('/getcharacters', function(req, res) {
     db.getCharacters()
-    .then(response => {console.log(response);
+    .then(response => {
         res.json(response);})
     
     
@@ -43,12 +43,10 @@ app.get('/getcharacters', function(req, res) {
 
 app.post('/characterDelete', function(req, res) {
     db.delCharacter(req);
-    res.status(200);
 });
 
 app.post('/characterEdit', function(req, res) {
     db.modCharacter(req);
-    res.status(200);
 });
 
 
