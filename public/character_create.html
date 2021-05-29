@@ -313,7 +313,7 @@
     }
 
     function getRaceInfo(userRace){
-        if(userRace!="Choose your race")
+        if(userRace!="Choose one")
         {
         return fetch("https://www.dnd5eapi.co/api/races/"+userRace)
             .then(response => response.json())
@@ -449,7 +449,7 @@
     }
 
      function getLevel(userClass,level) {
-        if(userClass!="Choose a class") {
+        if(userClass!="Choose one") {
             character.level = level;
         return fetch("https://www.dnd5eapi.co/api/classes/"+userClass+"/levels/"+level)
             .then(response => response.json())
@@ -617,7 +617,7 @@
             method: "POST",
             successRedirect : '/', 
             body: JSON.stringify(character)
-            });
+            })
     }
 
      function onSkillSelect(checked,node)
