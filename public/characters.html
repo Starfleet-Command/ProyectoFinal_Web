@@ -23,6 +23,10 @@
             .lead {
                 text-align: center;
             }
+
+            input[type=text]::placeholder {
+                text-align: center;
+            }
         </style>
     </head>
 
@@ -60,34 +64,21 @@
             You have the following characters
         </p>
 
-        <!-- Container class div that encloses a centered table -->
-        <div class="container">
-            <div class="row align-items-start">
-                <div class="col">
-                </div>
-
-                <div class="col text-center">
-                    <div id="characters">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                <th>Name</th>
-                                <th>Class</th>
-                                <th>Race</th>
-                                <th>Level</th>
-                                <th>Buttons</th>
-                                </tr>
-                            </thead>
-                
-                            <tbody id="charTable">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="col">
-                </div>
-            </div>
+        <div id="characters">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Race</th>
+                    <th>Level</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+    
+                <tbody id="charTable">
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
@@ -128,7 +119,7 @@ function deleteChar(id)
 function editChar(id)
 {
     var row = document.getElementById(id);
-    row.innerHTML+="<input type='text' class='form-control' id='newName' placeholder='New name'>" + "<button class='btn btn-danger' type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
+    row.innerHTML+="<div> <div class='input-group mb-3'> <input type='text' class='form-control' id='newName' placeholder='New name'> " + "<button class='btn btn-danger' type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button> </div> </div>"
     // row.innerHTML+="<input type='text'id='newName' placeholder='New Name'>" + " <button type='submit' onclick='sendEdit(\""+ id +"\")'>Submit</button>"
 }
 
@@ -152,9 +143,9 @@ function displayCharacters(chars)
 {
     var htmlDisplay = document.getElementById("charTable");
     for (let index = 0; index < chars.length; index++) {
-        var delbtn = " <button class='btn btn-danger' type='submit' onclick='deleteChar(\""+ chars[index]._id +"\")'>Delete</button>";
-        var editbtn = " <button class='btn btn-danger' type='submit' onclick='editChar(\""+ chars[index]._id +"\")'>Edit</button>";
-        htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td> <td>"+ delbtn + editbtn+"</td> </tr>";
+        var delbtn = "<button class='btn btn-dark' type='submit' onclick='deleteChar(\""+ chars[index]._id +"\")'>Delete</button> ";
+        var editbtn = "<button class='btn btn-dark' type='submit' onclick='editChar(\""+ chars[index]._id +"\")'>Edit name</button>";
+        htmlDisplay.innerHTML += "<tr id="+ chars[index]._id + "> <td>"+ chars[index].name + "</td> <td> "+ chars[index].class + "</td> <td> "+ chars[index].race + "</td> <td>"+ chars[index].level + "</td> <td>" + delbtn + editbtn+"</td> </tr>";
     }
 }
 </script>
