@@ -1,10 +1,10 @@
 # Proyecto Final Web: Dnd Character Creator
 
-## Que es?
+## Qué es?
 
 Una página web en donde podrás crear tu personaje de Dungeons And Dragons, 5th edition. 
 
-## Como se hizo? 
+## Cómo se hizo? 
 
 Se utilizó el siguiente technology stack: MongoDB -> Express -> Node js y Vanilla CSS
 
@@ -20,27 +20,27 @@ Este archivo cuenta con las siguientes funciones:
 * getClasses() -> Obtiene las clases del API
 * addToSelect(data, id) -> Inserta los elementos proporcionados en data en el select existente con id id.
 * getRaces() -> Obtiene las razas del API
-* getRaceInfo() -> Dependiendo de la raza que escogio el usuario, se buscan y se muestran ciertas caracteristicas en el API
+* getRaceInfo() -> Dependiendo de la raza que escogió el usuario, se buscan y se muestran ciertas caracteristicas en el API
 * addLevels() -> Usa addToSelect() para generar el select de los niveles posibles (1-20)
 * getClassInfo()-> Lo mismo pero que getRaceInfo() pero para la clase.
-* getLevel(userClass,level) -> Obtiene las caracteristicas especificas de la clase escogida al nivel escogido y las muestra
-* onSpellSelect() -> Usando la informacion de getLevel(), detecta si los hechizos escogidos son del nivel adecuado y la cantidad adecuada
+* getLevel(userClass,level) -> Obtiene las características específicas de la clase escogida al nivel escogido y las muestra
+* onSpellSelect() -> Usando la información de getLevel(), detecta si los hechizos escogidos son del nivel adecuado y la cantidad adecuada
 * onSkillSelect() -> Lo mismo que onSpellSelect() pero para las habilidades
-* preSubmit() -> Masajea los datos obtenidos por las diversas funciones a un formato estandar y lo prepara para ser enviado a guardar
+* preSubmit() -> Masajea los datos obtenidos por las diversas funciones a un formato estándar y lo prepara para ser enviado a guardar
 * PointBuy() -> Maneja el establecimiento de ability scores y cuida que el usuario no se pase del limite de puntos
 * getSpellsByLevel(userClass, level) -> Utiliza la clase seleccionada userClass y el nivel seleccionado level para ver si la clase puede lanzar hechizos, cuantos, en cuales niveles, y cuales hechizos. 
 
 
 ### Characters
 
-Este archivo utiliza la funcion del backend getCharacters() para obtener una lista de los personajes guardados en la base de datos, para que el usuario pueda borrarlos o editar su nombre. 
+Este archivo utiliza la función del backend getCharacters() para obtener una lista de los personajes guardados en la base de datos, para que el usuario pueda borrarlos o editar su nombre. 
 
 Este archivo cuenta con las siguientes funciones:
 
-* getCharacters() -> Utiliza la funcion del backend para obtener la lista de personajes
+* getCharacters() -> Utiliza la función del backend para obtener la lista de personajes
 * displayCharacters(chars) -> Muestra en la pagina los personajes contenidos en el arreglo chars
-* deleteChar(id) -> Llama a la funcion characterDelete() del backend para borrar al personaje definido por id
-* editChar(id) -> Una vez que el usuario haya demonstrado intencion de editar a un personaje, genera un input text field que se usara para cambiarle el nombre al personaje
+* deleteChar(id) -> Llama a la función characterDelete() del backend para borrar al personaje definido por id
+* editChar(id) -> Una vez que el usuario haya demonstrado intención de editar a un personaje, genera un input text field que se usara para cambiarle el nombre al personaje
 * sendEdit(id) -> Utiliza el valor del input de editChar para mandar llamar characterEdit() del backend y cambiar el nombre al personaje definido por id
 
 
